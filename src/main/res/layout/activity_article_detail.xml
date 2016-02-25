@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:fitsSystemWindows="true">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="@dimen/fab_dimens"
+        android:layout_height="@dimen/fab_dimens"
+        android:layout_gravity="end|bottom"
+        app:pressedTranslationZ="@dimen/fab_pressed_elevation"
+        android:layout_margin="@dimen/vertical_margin"
+        android:src="@drawable/ic_share"
+        android:id="@+id/share_fab"
+        android:elevation="@dimen/fab_elevation"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</FrameLayout>

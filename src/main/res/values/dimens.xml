@@ -1,0 +1,40 @@
+<resources>
+    <!-- detail -->
+    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+
+    <dimen name="fab_press_translation_z">6dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+
+    <dimen name="detail_backdrop_height">256dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="list_item_avatar_size">40dp</dimen>
+
+
+<!-- Based on the material design guide-->
+
+    <dimen name="bar_height">192dp</dimen>
+    <dimen name="side_margin">16dp</dimen>
+
+    <!-- Elevations-->
+
+    <dimen name="app_bar_elevation">4dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="card__picked_elevation">8dp</dimen>
+    <dimen name="fab_pressed_elevation">12dp</dimen>
+
+    <!-- Metrics-->
+    <dimen name="vertical_margin">16dp</dimen>
+    <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="list_item_margin">8dp</dimen>
+    <dimen name="toolbar_min_height">56dp</dimen>
+    <dimen name="collapsed_toolbar_height">128dp</dimen>
+    <dimen name="fab_dimens">56dp</dimen>
+    <dimen name="icon_dimens">40dp</dimen>
+
+    <!-- Typography-->
+    <dimen name="app_bar_text_size">15sp</dimen>
+    <dimen name="detail_title_text_size">20sp</dimen>
+    <dimen name="detail_body_text_size">15sp</dimen>
+</resources>
