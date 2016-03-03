@@ -34,4 +34,8 @@ In this project, I redesigned the app to follow the Material Design guidelines.
 - Integrated a FAB for specific actions
 - Recreated a RecyclerView Adapter and added a callback interface to handle OnclickListener
 
+![Alt text](https://raw.githubusercontent.com/princeCoder/XYZReaderApp/master/device-2016-03-03-121609.png "Phone Portrait")
 
+![Alt text](https://raw.githubusercontent.com/princeCoder/XYZReaderApp/master/device-2016-03-03-120907.png "Tablet Portrait")
+
+![Alt text](https://raw.githubusercontent.com/princeCoder/XYZReaderApp/master/device-2016-03-03-120738.png "Tablet Landscape")
