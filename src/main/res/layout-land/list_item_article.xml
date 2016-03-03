@@ -2,7 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:elevation="@dimen/card_elevation"
+    android:background="@drawable/list_background"
     android:id="@+id/main_container"
+    android:layout_marginTop="1dp"
     android:foreground="?selectableItemBackground"
     android:layout_height="@dimen/list_item_height">
 
@@ -14,14 +16,13 @@
         android:layout_marginBottom="@dimen/horizontal_margin">
 
         <!--suppress AndroidLintContentDescription -->
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/thumbnail"
             android:layout_width="@dimen/icon_dimens"
             android:layout_gravity="center_vertical"
             android:layout_height="@dimen/icon_dimens"
             android:layout_marginLeft="@dimen/vertical_margin"
-            android:layout_marginStart="@dimen/vertical_margin"
-            android:background="@color/photo_placeholder" />
+            android:layout_marginStart="@dimen/vertical_margin"/>
         <LinearLayout android:layout_width="0dp"
                       android:layout_weight="4"
                       android:layout_height="wrap_content"
