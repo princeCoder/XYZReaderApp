@@ -25,6 +25,8 @@ public class UpdaterService extends IntentService {
 
     public static final String BROADCAST_ACTION_STATE_CHANGE
             = "com.example.xyzreader.intent.action.STATE_CHANGE";
+    public static final String BROADCAST_ACTION_NO_CONNECTIVITY
+            = "com.example.xyzreader.intent.action.NO_CONNECTIVITY";
     public static final String EXTRA_REFRESHING
             = "com.example.xyzreader.intent.extra.REFRESHING";
 
@@ -40,11 +42,14 @@ public class UpdaterService extends IntentService {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null || !ni.isConnected()) {
             Log.w(TAG, "Not online, not refreshing.");
+            Intent broadcastIntent=new Intent(BROADCAST_ACTION_NO_CONNECTIVITY);
+            getApplicationContext().sendBroadcast(broadcastIntent);
             return;
         }
 
-        sendStickyBroadcast(
-                new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, true));
+        Intent broadcastIntent=new Intent(BROADCAST_ACTION_STATE_CHANGE);
+        broadcastIntent.putExtra(EXTRA_REFRESHING, true);
+        getApplicationContext().sendBroadcast(broadcastIntent);
 
         // Don't even inspect the intent, we only do one thing, and that's fetch content.
         ArrayList<ContentProviderOperation> cpo = new ArrayList<ContentProviderOperation>();

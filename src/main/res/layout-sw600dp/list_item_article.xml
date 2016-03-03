@@ -4,6 +4,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?selectableItemBackground"
+                                    android:id="@+id/main_container"
     android:elevation="@dimen/card_elevation"
     android:layout_height="wrap_content">
 
@@ -15,11 +16,11 @@
         android:orientation="vertical">
 
         <!--suppress AndroidLintContentDescription -->
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:transitionName="@string/transition_image"
             android:id="@+id/thumbnail"
             android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@color/photo_placeholder" />
+            android:layout_height="64dp" />
 
         <TextView
             android:id="@+id/article_title"

@@ -9,6 +9,8 @@
     <dimen name="card_margin">16dp</dimen>
     <dimen name="list_item_avatar_size">40dp</dimen>
 
+    <dimen name="init_scroll_up_distace">400px</dimen>
+
 
 <!-- Based on the material design guide-->
 

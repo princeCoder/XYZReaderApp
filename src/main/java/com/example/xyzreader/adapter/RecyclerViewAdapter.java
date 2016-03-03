@@ -2,6 +2,7 @@ package com.example.xyzreader.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -13,8 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
-import com.example.xyzreader.ui.DynamicHeightNetworkImageView;
-import com.example.xyzreader.ui.ImageLoaderHelper;
 
 /**
  * Created by Prinzly Ngotoum on 2/23/16.
@@ -35,12 +34,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ImageView thumbnailView;
         public TextView titleView;
         public TextView subtitleView;
+        public CardView mContainer;
 
         public ViewHolder(View view) {
             super(view);
             thumbnailView = (ImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+            mContainer=(CardView)view.findViewById(R.id.main_container);
             view.setClickable(true);
 
         }
@@ -63,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mCallback.onClick(getItemId(vh.getAdapterPosition()), vh);
+                    mCallback.onClick(getItemId(vh.getAdapterPosition()),vh);
                 }
             });
             return vh;
@@ -89,7 +90,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
                 .fitCenter()
                 .into(holder.thumbnailView);
-
     }
 
 
@@ -103,7 +103,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyDataSetChanged();
     }
 
+    public void setCursor(Cursor newCursor) {
+        mCursor = newCursor;
+        notifyDataSetChanged();
+    }
+
     public interface ViewHolderOnClickHandler{
-        public void onClick(long id, ViewHolder vh);
+        void onClick(long id,ViewHolder vh);
     }
 }

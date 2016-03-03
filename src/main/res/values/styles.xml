@@ -18,7 +18,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
-
+        <item name="android:windowContentTransitions">true</item>
     </style>
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -44,6 +44,10 @@
     <style name="ExpendedAppBar" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="AppTheme.Home">
+        <item name="android:windowExitTransition">@transition/grid_exit</item>
     </style>
 
 </resources>

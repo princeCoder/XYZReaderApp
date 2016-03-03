@@ -16,6 +16,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.adapter.RecyclerViewAdapter;
@@ -36,6 +39,8 @@ public class ArticleListActivity extends AppCompatActivity implements
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
+    private TextView mEmptyView;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +51,22 @@ public class ArticleListActivity extends AppCompatActivity implements
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_container);
         collapsingToolbar.setTitle(getResources().getString(R.string.welcome_xyz_reader));
 
+        mEmptyView=(TextView)findViewById(R.id.recycler_view_empty);
+
+        mImageView=(ImageView)findViewById(R.id.thumbnail);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        if(getResources().getBoolean(R.bool.muilti_columns)){// If it is a tablet
-            int columnCount = getResources().getInteger(R.integer.list_column_count);
-            StaggeredGridLayoutManager sglm =
-                    new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-            mRecyclerView.setLayoutManager(sglm);
-        }
-        else{// This is just a phone
-            // Set the layout manager
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(ArticleListActivity.this));
-        }
 
-        mAdapter=new RecyclerViewAdapter(this, this);
-        mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
@@ -79,12 +83,15 @@ public class ArticleListActivity extends AppCompatActivity implements
         super.onStart();
         registerReceiver(mRefreshingReceiver,
                 new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
+        registerReceiver(mConnectivityReceiver,
+                new IntentFilter(UpdaterService.BROADCAST_ACTION_NO_CONNECTIVITY));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver(mRefreshingReceiver);
+        unregisterReceiver(mConnectivityReceiver);
     }
 
     private boolean mIsRefreshing = false;
@@ -94,13 +101,30 @@ public class ArticleListActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
                 mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
+
+                updateRefreshingUI();
+            }
+        }
+    };
+
+
+    private BroadcastReceiver mConnectivityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (UpdaterService.BROADCAST_ACTION_NO_CONNECTIVITY.equals(intent.getAction())) {
+                mIsRefreshing = false;
                 updateRefreshingUI();
             }
         }
     };
 
     private void updateRefreshingUI() {
-        mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
+            }
+        });
     }
 
     @Override
@@ -110,7 +134,28 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        mAdapter.swapCursor(cursor);
+
+        mAdapter=new RecyclerViewAdapter(this, this);
+        mAdapter.setCursor(cursor);
+        mAdapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(mAdapter);
+
+        if(getResources().getBoolean(R.bool.muilti_columns)){// If it is a tablet
+            int columnCount = getResources().getInteger(R.integer.list_column_count);
+            StaggeredGridLayoutManager sglm =
+                    new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(sglm);
+        }
+        else{// This is just a phone
+            // Set the layout manager
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(ArticleListActivity.this));
+        }
+
+        if(mAdapter.getItemCount()==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else{
+            mEmptyView.setVisibility(View.GONE);
+        }
 
     }
 
@@ -119,16 +164,19 @@ public class ArticleListActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(null);
     }
 
+
     @Override
     public void onClick(long id, RecyclerViewAdapter.ViewHolder vh) {
-        Bundle bundle = null;
+        Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(id));
+
+        //Get the reference of the view to share
+        View sharedView=vh.thumbnailView;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    ItemsContract.Items.buildItemUri(id)), bundle);
+            // shared element transition
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this, sharedView, sharedView.getTransitionName()).toBundle();
+            startActivity(intent, bundle);
         } else {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    ItemsContract.Items.buildItemUri(id)));
+            startActivity(intent);
         }
     }
 }

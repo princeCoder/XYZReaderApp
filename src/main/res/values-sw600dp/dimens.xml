@@ -9,6 +9,8 @@
     <dimen name="bar_height">256dp</dimen>
     <dimen name="side_margin">80dp</dimen>
 
+    <dimen name="init_scroll_up_distace">400px</dimen>
+
 
     <!-- Elevations-->
 

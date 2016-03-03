@@ -1,5 +1,7 @@
 package com.example.xyzreader.ui;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
@@ -12,7 +14,7 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
@@ -87,6 +89,15 @@ public class ArticleDetailActivity extends AppCompatActivity
                 mSelectedItemId = mStartId;
             }
         }
+    }
+
+    @Override
+    public void onEnterAnimationComplete() {
+        super.onEnterAnimationComplete();
+        NestedScrollView scrollView=((ArticleDetailFragment) mPagerAdapter.getItem(mPager.getCurrentItem())).getScrollView();
+        final int startScrollPos=getResources().getDimensionPixelSize(R.dimen.init_scroll_up_distace);
+        Animator animator= ObjectAnimator.ofInt(scrollView,"scrollY",startScrollPos).setDuration(300);
+        animator.start();
     }
 
     @Override

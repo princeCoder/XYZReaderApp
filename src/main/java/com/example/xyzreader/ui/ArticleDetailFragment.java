@@ -7,17 +7,22 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +37,7 @@ import com.example.xyzreader.data.ArticleLoader;
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>{
     private static final String TAG = "ArticleDetailFragment";
 
     public static final String ARG_ITEM_ID = "item_id";
@@ -45,6 +50,7 @@ public class ArticleDetailFragment extends Fragment implements
     private String mTitle;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private Typeface mRosario;
+    private NestedScrollView mScrollView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,6 +75,7 @@ public class ArticleDetailFragment extends Fragment implements
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
         setHasOptionsMenu(true);
+        bodyTextAnimation();
     }
 
     @Override
@@ -97,9 +104,8 @@ public class ArticleDetailFragment extends Fragment implements
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mToolbar = (Toolbar) mRootView.findViewById(R.id.toolbar_detail);
+        mScrollView=(NestedScrollView)mRootView.findViewById(R.id.nested_scrollview);
         mCollapsingToolbar=(CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_container_detail);
-//        mCollapsingToolbar.setCollapsedTitleTextAppearance(R.style.Base_TextAppearance_AppCompat_Title);
-//        mCollapsingToolbar.setExpandedTitleTextAppearance(R.style.Base_TextAppearance_AppCompat_Title);
         getActivityCast().setSupportActionBar(mToolbar);
         getActivityCast().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getActivityCast().getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -116,6 +122,10 @@ public class ArticleDetailFragment extends Fragment implements
 
         bindViews();
         return mRootView;
+    }
+
+    public NestedScrollView getScrollView(){
+        return mScrollView;
     }
 
 
@@ -164,8 +174,30 @@ public class ArticleDetailFragment extends Fragment implements
                     });
         } else {
             mRootView.setVisibility(View.GONE);
-            bylineView.setText("N/A" );
+            bylineView.setText("N/A");
             bodyView.setText("N/A");
+        }
+
+
+
+    }
+
+
+
+    /**
+     * Set linear animation for the text
+     */
+    private void bodyTextAnimation() {
+        Slide slide = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            slide = new Slide(Gravity.BOTTOM);
+            slide.addTarget(R.id.article_body);
+            slide.excludeTarget(R.id.detail_container,true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                slide.setInterpolator(AnimationUtils.loadInterpolator(getContext(), android.R.interpolator.linear));
+            }
+            slide.setDuration(300);
+            getActivityCast().getWindow().setEnterTransition(slide);
         }
     }
 

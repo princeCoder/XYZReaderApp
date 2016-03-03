@@ -52,12 +52,31 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
+        <RelativeLayout
             android:layout_height="match_parent"
-            android:background="@color/trans"
-            android:clipToPadding="false"/>
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/abc_dialog_padding_material">
+            <TextView
+                android:id="@+id/recycler_view_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary_text"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:paddingTop="@dimen/horizontal_margin"
+                android:text="@string/no_information_available" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:scrollbarStyle="outsideOverlay"/>
+
+
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>
