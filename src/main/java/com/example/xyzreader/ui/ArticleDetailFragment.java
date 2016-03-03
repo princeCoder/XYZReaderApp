@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
@@ -22,8 +23,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -75,7 +78,6 @@ public class ArticleDetailFragment extends Fragment implements
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
         setHasOptionsMenu(true);
-        bodyTextAnimation();
     }
 
     @Override
@@ -97,12 +99,14 @@ public class ArticleDetailFragment extends Fragment implements
         // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
         // we do this in onActivityCreated.
         getLoaderManager().initLoader(0, null, this);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
+
         mToolbar = (Toolbar) mRootView.findViewById(R.id.toolbar_detail);
         mScrollView=(NestedScrollView)mRootView.findViewById(R.id.nested_scrollview);
         mCollapsingToolbar=(CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_container_detail);
@@ -119,8 +123,12 @@ public class ArticleDetailFragment extends Fragment implements
             }
         });
         mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mPhotoView.setTransitionName(getString(R.string.transition_image) + String.valueOf(mItemId));
+        }
 
         bindViews();
+        bodyTextAnimation();
         return mRootView;
     }
 
@@ -137,6 +145,7 @@ public class ArticleDetailFragment extends Fragment implements
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
         bodyView.setTypeface(mRosario);
+        final ProgressBar progressBar = (ProgressBar) mRootView.findViewById(R.id.progressImage);
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -164,14 +173,19 @@ public class ArticleDetailFragment extends Fragment implements
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
                                         .setBackgroundColor(mMutedColor);
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
+                            progressBar.setVisibility(View.GONE);
                             Log.d(getTag(),volleyError.getMessage());
                         }
                     });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                scheduleStartPostponedTransition(mPhotoView);
+            }
         } else {
             mRootView.setVisibility(View.GONE);
             bylineView.setText("N/A");
@@ -186,18 +200,37 @@ public class ArticleDetailFragment extends Fragment implements
 
     /**
      * Set linear animation for the text
+     * This is a content animation
      */
+    @TargetApi(Build.VERSION_CODES.M)
     private void bodyTextAnimation() {
         Slide slide = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.article_body);
-            slide.excludeTarget(R.id.detail_container,true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            slide.excludeTarget(R.id.detail_container, true);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 slide.setInterpolator(AnimationUtils.loadInterpolator(getContext(), android.R.interpolator.linear));
-            }
+//            }
             slide.setDuration(300);
             getActivityCast().getWindow().setEnterTransition(slide);
+        }
+    }
+
+
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                    new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                getActivityCast().startPostponedEnterTransition();
+                            }
+                            return true;
+                        }
+                    });
         }
     }
 

@@ -169,11 +169,13 @@ public class ArticleListActivity extends AppCompatActivity implements
     public void onClick(long id, RecyclerViewAdapter.ViewHolder vh) {
         Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(id));
 
-        //Get the reference of the view to share
-        View sharedView=vh.thumbnailView;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //Get the reference of the view to share
+            View sharedView=vh.thumbnailView;
+            String tName= getString(R.string.transition_image) + String.valueOf(id);
+            sharedView.setTransitionName(tName);
             // shared element transition
-            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this, sharedView, sharedView.getTransitionName()).toBundle();
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this, sharedView, tName).toBundle();
             startActivity(intent, bundle);
         } else {
             startActivity(intent);

@@ -19,7 +19,6 @@
             android:layout_gravity="center_vertical"
             android:layout_height="@dimen/icon_dimens"
             android:layout_marginLeft="@dimen/vertical_margin"
-            android:transitionName="@string/transition_image"
             android:background="@color/photo_placeholder" />
         <LinearLayout android:layout_width="0dp"
                       android:layout_weight="4"
