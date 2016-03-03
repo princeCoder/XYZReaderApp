@@ -1,6 +1,5 @@
 package com.example.xyzreader.ui;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
@@ -83,6 +82,7 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        // Set a new font family via Typeface
         mRosario=Typeface.createFromAsset(getActivity().getAssets(), "Rosario-Regular.ttf");
     }
 
@@ -128,6 +128,7 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
+        // Apply the content transition
         bodyTextAnimation();
         return mRootView;
     }
@@ -202,22 +203,25 @@ public class ArticleDetailFragment extends Fragment implements
      * Set linear animation for the text
      * This is a content animation
      */
-    @TargetApi(Build.VERSION_CODES.M)
     private void bodyTextAnimation() {
         Slide slide = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             slide = new Slide(Gravity.BOTTOM);
             slide.addTarget(R.id.article_body);
             slide.excludeTarget(R.id.detail_container, true);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                slide.setInterpolator(AnimationUtils.loadInterpolator(getContext(), android.R.interpolator.linear));
-//            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                slide.setInterpolator(AnimationUtils.loadInterpolator(getActivityCast(), android.R.interpolator.linear));
+            }
+            //Set the duration just right
             slide.setDuration(300);
+            //Set the enter transition
             getActivityCast().getWindow().setEnterTransition(slide);
         }
     }
 
 
+    //Postpone the transition on a sharedElement
+    //In my case it will be the imageView in the collapsedToolbarlayout
     private void scheduleStartPostponedTransition(final View sharedElement) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sharedElement.getViewTreeObserver().addOnPreDrawListener(

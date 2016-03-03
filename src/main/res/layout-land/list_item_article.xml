@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:elevation="@dimen/card_elevation"
     android:id="@+id/main_container"
+    android:foreground="?selectableItemBackground"
     android:layout_height="@dimen/list_item_height">
 
     <LinearLayout
@@ -19,12 +20,14 @@
             android:layout_gravity="center_vertical"
             android:layout_height="@dimen/icon_dimens"
             android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_marginStart="@dimen/vertical_margin"
             android:background="@color/photo_placeholder" />
         <LinearLayout android:layout_width="0dp"
                       android:layout_weight="4"
                       android:layout_height="wrap_content"
                       android:layout_gravity="center_vertical"
                       android:layout_marginLeft="@dimen/vertical_margin"
+                      android:layout_marginStart="@dimen/vertical_margin"
             android:orientation="vertical">
 
             <TextView
@@ -35,6 +38,7 @@
                 android:textColor="@color/primary_text"
                 style="?android:attr/textAppearanceMedium"
                 android:paddingRight="@dimen/vertical_margin"
+                android:paddingEnd="@dimen/vertical_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:ellipsize="end"
                 android:maxLines="1" />
@@ -46,6 +50,7 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:paddingRight="@dimen/vertical_margin"
+                android:paddingEnd="@dimen/vertical_margin"
                 android:textColor="@color/secondary_text"
                 style="?android:attr/textAppearanceMedium"
                 android:fontFamily="sans-serif-condensed"

@@ -70,7 +70,7 @@
                 android:id="@+id/meta_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#333"
+                android:background="@color/meta_bar"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/horizontal_margin"
@@ -90,6 +90,8 @@
                     android:textSize="@dimen/app_bar_text_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/vertical_margin"
+                    android:paddingEnd="@dimen/vertical_margin"
                     android:paddingLeft="@dimen/vertical_margin"
                     android:paddingRight="@dimen/vertical_margin"
                     android:textColor="@color/accent" />

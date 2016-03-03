@@ -15,5 +15,6 @@
 
     <string name="recycler_binding_error">Not bound to RecyclerView</string>
     <string name="article_details">article details</string>
+    <string name="thumbnail_image">thumbnail image</string>
 
 </resources>

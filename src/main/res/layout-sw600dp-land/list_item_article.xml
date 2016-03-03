@@ -19,8 +19,8 @@
             android:id="@+id/thumbnail"
             android:contentDescription="@string/thumbnail_image"
             android:layout_width="@dimen/thumbnail_width"
-            android:layout_gravity="left"
             android:layout_marginTop="@dimen/horizontal_margin"
+            android:layout_gravity="left"
             android:layout_marginLeft="@dimen/vertical_margin"
             android:layout_marginStart="@dimen/vertical_margin"
             android:layout_height="@dimen/thumbnail_height"/>
@@ -38,10 +38,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primary_text"
                 android:fontFamily="sans-serif-condensed"
-                style="?android:attr/textAppearanceMedium"
+                style="?android:attr/textAppearanceLarge"
                 android:text="title"
                 android:ellipsize="end"
-                android:maxLines="4" />
+                android:maxLines="2" />
 
             <TextView
                 android:id="@+id/article_subtitle"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="subtitle"
-                style="?android:attr/textAppearanceMedium"
+                style="?android:attr/textAppearanceLarge"
                 android:textColor="@color/secondary_text"
                 android:fontFamily="sans-serif-condensed"
                 android:singleLine="true"
